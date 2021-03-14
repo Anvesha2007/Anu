@@ -1,46 +1,82 @@
-var tomImg1
-var tomImg2
-var bg
-var  tomImg3
-var  jerryImg1
-var  jerryImg2
-var  jerryImg3
-var tom,jerry
-function preload() {
-    //load the images here
-    bg = loadImage("images/garden.png");
-    tomImg1= loadAnimation("images/cat1.png");
-    tomImg2=loadAnimation("images/cat2.png","images/cat3.png");
-    tomImg3= loadAnimation("images/cat4.png");
-    jerryImg1=loadAnimation("images/mouse1.png");
-    jerryImg2= loadAnimation("images/mouse2.png","images/mouse3.png");
-    jerryImg3=loadAnimation("images/mouse4.png");
-    
+var helicopterIMG, helicopterSprite, packageSprite,packageIMG;
+var packageBody,ground
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+const Body = Matter.Body;
+
+function preload()
+{
+	helicopterIMG=loadImage("helicopter.png")
+	packageIMG=loadImage("package.png")
 }
 
-function setup(){
-    createCanvas(1000,800);
-    //create tom and jerry sprites here
-tom=createSprite(870,600,100,100)
-jerry=createSprite(200,600,100,100)
-tom.addAnimation("tomSleeping",tomImg1)
-jerry.addAnimation("jerryStanding",jerryImg1)
-tom.scale=0.2
-jerry.scale=0.2
+function setup() {
+	createCanvas(800, 700);
+	rectMode(CENTER);
+	
 
+	packageSprite=createSprite(width/2, 80, 10,10);
+	packageSprite.addImage(packageIMG)
+	packageSprite.scale=0.2
+
+	helicopterSprite=createSprite(width/2, 200, 10,10);
+	helicopterSprite.addImage(helicopterIMG)
+	helicopterSprite.scale=0.6
+
+	groundSprite=createSprite(width/2, height-35, width,10);
+	groundSprite.shapeColor=color(255)
+
+
+	engine = Engine.create();
+	world = engine.world;
+
+	packageBody = Bodies.circle(width/2 , 200 , 5 , {restitution:0.4, isStatic:true});
+	World.add(world, packageBody);
+	
+
+	//Create a Ground
+	ground = Bodies.rectangle(width/2, 650, width, 10 , {isStatic:true} );
+ 	World.add(world, ground);
+
+ 	boxPosition=width/2-100
+ 	boxY=610;
+
+
+ 	boxleftSprite=createSprite(boxPosition, boxY, 20,100);
+ 	boxleftSprite.shapeColor=color(255,0,0);
+
+ 	boxLeftBody = Bodies.rectangle(boxPosition+20, boxY, 20,100 , {isStatic:true} );
+ 	World.add(world, boxLeftBody);
+
+ 	boxBase=createSprite(boxPosition+100, boxY+40, 200,20);
+ 	boxBase.shapeColor=color(255,0,0);
+
+ 	boxBottomBody = Bodies.rectangle(boxPosition+100, boxY+45-20, 200,20 , {isStatic:true} );
+ 	World.add(world, boxBottomBody);
+
+ 	boxleftSprite=createSprite(boxPosition+200 , boxY, 20,100);
+ 	boxleftSprite.shapeColor=color(255,0,0);
+
+ 	boxRightBody = Bodies.rectangle(boxPosition+200-20 , boxY, 20,100 , {isStatic:true} );
+ 	World.add(world, boxRightBody);
+
+
+	Engine.run(engine);
+  
 }
+
 
 function draw() {
-    
-    
-    background(bg);
-    //Write condition here to evalute if tom and jerry collide
+  rectMode(CENTER);
+  background(0);
+ 
+  packageSprite.x= packageBody.position.x 
+  packageSprite.y= packageBody.position.y 
 
-    drawSprites();
-}
-
-
-function keyPressed(){
-
-  //For moving and changing animation write code here
+  
+  drawSprites();
+  
+  
+ 
 }
